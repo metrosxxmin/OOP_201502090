@@ -28,6 +28,7 @@ protected:
     };
 public:
     smart_obj();
+	explicit smart_obj(int _val);
     ~smart_obj();
 }; // end of class smart_obj
 } // end of namespace ptr

@@ -1,7 +1,3 @@
-//
-// Created by 김혁진 on 14/10/2019.
-//
-
 #include "object.h"
 
 Object::Object() {
@@ -45,4 +41,3 @@ Object Object::operator/(const Object &obj) {
     l.val /= obj.val;
     return l;
 }
-

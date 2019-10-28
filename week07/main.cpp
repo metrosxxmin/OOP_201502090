@@ -1,3 +1,4 @@
+/*
 #include <iostream>
 #include "smart_ptr/object.h"
 #include "smart_ptr/shared_mut.h"
@@ -24,4 +25,4 @@ int main() {
     }
     return 0;
 }
-
+*/

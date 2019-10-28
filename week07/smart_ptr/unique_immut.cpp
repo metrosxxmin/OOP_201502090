@@ -1,35 +1,72 @@
-#ifndef SMART_PTR_SMART_OBJ_H
-#define SMART_PTR_SMART_OBJ_H
-
-#include "object.h"
+#include "unique_immut.h"
 
 namespace ptr {
-class smart_obj {
-protected:
-    struct mgr {
-        mgr() {
-            ptr = nullptr;
-            count = 0;
-        }
-        explicit mgr(int val) {
-            ptr = new Object(val);
-            count = 1;
-        }
-        explicit mgr(Object* _ptr) {
-            ptr = _ptr;
-            count = 1;
-        }
-        ~mgr() {
-            delete(ptr);
-            ptr = nullptr;
-        }
-        Object* ptr;
-        int count;
-    };
-public:
-    smart_obj();
-    ~smart_obj();
-}; // end of class smart_obj
-} // end of namespace ptr
+unique_immut::unique_immut() {
+    _mgr = new mgr();
+}
 
-#endif //SMART_PTR_SMART_OBJ_H
+unique_immut::unique_immut(Object *obj) {
+    _mgr = new mgr(obj);
+}
+
+unique_immut::unique_immut(const unique_immut &immut) {
+    if (immut._mgr) {
+        int val = immut._mgr->ptr->get();
+        _mgr = new mgr(val);
+    }
+	else {
+		_mgr = new mgr();
+	}
+}
+
+unique_immut::~unique_immut() {
+    release();
+}
+
+Object* unique_immut::get() const {
+	if (this->_mgr->ptr != nullptr) return this->_mgr->ptr;
+	else return nullptr;
+}
+
+void unique_immut::release() {
+	if (this->_mgr->ptr != nullptr) this->_mgr->~mgr();
+}
+
+unique_immut unique_immut::operator+(unique_immut& unique) {
+	int newval = this->_mgr->ptr->get() + unique._mgr->ptr->get();
+	this->release();
+	unique.release();
+	return unique_immut(new Object(newval));
+}
+
+unique_immut unique_immut::operator-(unique_immut& unique) {
+	int newval = this->_mgr->ptr->get() - unique._mgr->ptr->get();
+	this->release();
+	unique.release();
+	return unique_immut(new Object(newval));
+}
+
+unique_immut unique_immut::operator*(unique_immut& unique) {
+	int newval = this->_mgr->ptr->get() * unique._mgr->ptr->get();
+	this->release();
+	unique.release();
+	return unique_immut(new Object(newval));
+}
+
+unique_immut unique_immut::operator/(unique_immut& unique) {
+	int newval = this->_mgr->ptr->get() / unique._mgr->ptr->get();
+	this->release();
+	unique.release();
+	return unique_immut(new Object(newval));
+}
+
+Object* unique_immut::operator->() {
+	return this->_mgr->ptr;
+}
+
+unique_immut& unique_immut::operator=(unique_immut& r) {
+	this->release();
+	this->_mgr = r._mgr;
+	return *this;
+}
+} // end of namespace ptr
