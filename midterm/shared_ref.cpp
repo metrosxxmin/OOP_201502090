@@ -10,11 +10,14 @@ shared_ref::shared_ref() {
     // _mgr의 default 값을 빈 mgr으로 설정
 }
 
-// need to modify
 shared_ref::shared_ref(student* student) {
-	_mgr = new mgr(student);
-	ptr_map[student] = _mgr;
-
+	if (ptr_map.find(student) != ptr_map.end()) {
+		_mgr = empty_mgr;
+	}
+	else {
+		_mgr = new mgr(student);
+		ptr_map[student] = _mgr;
+	}
     // ptr_map에 student의 주소가 있으면 _mgr을 빈 mgr으로 설정
     // ptr_map에 student의 주소가 없으면 _mgr을 student의 메모리를 관리하는 mgr으로 설정하고
     // ptr_map에 key를 student의 주소로 하고 value를 mgr로 등록 ==> student의 주소가 shared_ref의 mgr로 관리되는지 확인 가능
@@ -39,7 +42,7 @@ void shared_ref::release() {
     if (_mgr != nullptr) {
 		this->_mgr->count--;
 
-		if (this->_mgr->count == 0) {
+		if (this->_mgr->count <= 0) {
 			this->_mgr->~mgr();
 		}
 		this->_mgr = new mgr();
