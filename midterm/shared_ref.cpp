@@ -43,7 +43,8 @@ void shared_ref::release() {
 		this->_mgr->count--;
 
 		if (this->_mgr->count <= 0) {
-			this->_mgr->~mgr();
+			ptr_map.erase(this->get());
+			delete this->_mgr;
 		}
 		this->_mgr = new mgr();
 	}
