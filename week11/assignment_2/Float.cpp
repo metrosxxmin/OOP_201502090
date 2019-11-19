@@ -73,14 +73,14 @@ Number *Float::add(Number * num) {
     } else if (num->types() == FLOAT) {
 
         Float* aFloat = dynamic_cast<Float *>(num);
-        this->set_val(this->value + aFloat->val());
-        delete aFloat;
-        return this;
+        aFloat->set_val(this->value + aFloat->val());
+        delete this;
+        return aFloat;
 
     } else if (num->types() == COMPLEX) {
 
         Complex* aComplex = dynamic_cast<Complex *>(num);
-        aComplex->set_val(this->value + aComplex->real(), aComplex->imag());
+        aComplex->set_val(std::make_pair(this->value + aComplex->real(), aComplex->imag()));
         delete this;
         return aComplex;
 
@@ -105,14 +105,14 @@ Number *Float::sub(Number * num) {
     } else if (num->types() == FLOAT) {
 
         Float* aFloat = dynamic_cast<Float *>(num);
-        this->set_val(this->value - aFloat->val());
-        delete aFloat;
-        return this;
+        aFloat->set_val(this->value - aFloat->val());
+        delete this;
+        return aFloat;
 
     } else if (num->types() == COMPLEX) {
 
         Complex* aComplex = dynamic_cast<Complex *>(num);
-        aComplex->set_val(this->value - aComplex->real(), aComplex->imag());
+        aComplex->set_val(std::make_pair(this->value - aComplex->real(), -aComplex->imag()));
         delete this;
         return aComplex;
 
@@ -137,14 +137,14 @@ Number *Float::mul(Number *num) {
     } else if (num->types() == FLOAT) {
 
         Float* aFloat = dynamic_cast<Float *>(num);
-        this->set_val(this->value * aFloat->val());
-        delete aFloat;
-        return this;
+        aFloat->set_val(this->value * aFloat->val());
+        delete this;
+        return aFloat;
 
     } else if (num->types() == COMPLEX) {
 
         Complex* aComplex = dynamic_cast<Complex *>(num);
-        aComplex->set_val(this->value * aComplex->real(),this->value * aComplex->imag());
+        aComplex->set_val(std::make_pair(this->value * aComplex->real(), this->value * aComplex->imag()));
         delete this;
         return aComplex;
 
@@ -165,16 +165,20 @@ Number *Float::div(Number *num) {
     if (num->types() == INTEGER) {
 
         Integer* aInteger = dynamic_cast<Integer *>(num);
-        this->set_val(this->value / aInteger->val());
-        delete aInteger;
+        if (aInteger->val() != 0) {
+            this->set_val(this->value / aInteger->val());
+            delete aInteger;
+        }
         return this;
 
     } else if (num->types() == FLOAT) {
 
         Float* aFloat = dynamic_cast<Float *>(num);
-        this->set_val(this->value / aFloat->val());
-        delete aFloat;
-        return this;
+        if (aFloat->val() != 0) {
+            aFloat->set_val(this->value / aFloat->val());
+            delete this;
+        }
+        return aFloat;
 
     } else if (num->types() == COMPLEX) {
 

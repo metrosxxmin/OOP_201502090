@@ -11,8 +11,7 @@ Complex::Complex() {
      * std 네임 스페이스의 make_pair를 통해 pair 객체 생성 가능
      * real과 imag에 각각 0을 대입
      */
-    this->value.first = 0;
-    this->value.second = 0;
+    this->value = std::make_pair(0, 0);
 }
 
 Complex::Complex(float _val1, float _val2) {
@@ -20,8 +19,7 @@ Complex::Complex(float _val1, float _val2) {
      * std 네임 스페이스의 make_pair를 통해 pair 객체 생성 가능
      * real과 imag에 각각 _val1, _val2를 대입
      */
-    this->value.first = _val1;
-    this->value.second = _val2;
+    this->value = std::make_pair(_val1, _val2);
 }
 
 Number *Complex::add(Number * num) {
@@ -56,21 +54,21 @@ Number *Complex::add(Number * num) {
     if (num->types() == INTEGER) {
 
         Integer* aInteger = dynamic_cast<Integer *>(num);
-        this->set_val(this->value.first + aInteger->val(), this->value.second);
+        this->set_val(this->real() + aInteger->val(), this->imag());
         delete aInteger;
         return this;
 
     } else if (num->types() == FLOAT) {
 
         Float* aFloat = dynamic_cast<Float *>(num);
-        this->set_val(this->value.first + aFloat->val(), this->value.second);
+        this->set_val(this->real() + aFloat->val(), this->imag());
         delete aFloat;
         return this;
 
     } else if (num->types() == COMPLEX) {
 
         Complex* aComplex = dynamic_cast<Complex *>(num);
-        this->set_val(this->value.first + aComplex->real(), this->value.second + aComplex->imag());
+        this->set_val(std::make_pair(this->real() + aComplex->real(), this->imag() + aComplex->imag()));
         delete aComplex;
         return this;
 
@@ -87,21 +85,21 @@ Number *Complex::sub(Number * num) {
     if (num->types() == INTEGER) {
 
         Integer* aInteger = dynamic_cast<Integer *>(num);
-        this->set_val(this->value.first - aInteger->val(), this->value.second);
+        this->set_val(this->real() - aInteger->val(), this->imag());
         delete aInteger;
         return this;
 
     } else if (num->types() == FLOAT) {
 
         Float* aFloat = dynamic_cast<Float *>(num);
-        this->set_val(this->value.first - aFloat->val(), this->value.second);
+        this->set_val(this->real() - aFloat->val(), this->imag());
         delete aFloat;
         return this;
 
     } else if (num->types() == COMPLEX) {
 
         Complex* aComplex = dynamic_cast<Complex *>(num);
-        this->set_val(this->value.first - aComplex->real(), this->value.second - aComplex->imag());
+        this->set_val(std::make_pair(this->real() - aComplex->real(), this->imag() - aComplex->imag()));
         delete aComplex;
         return this;
 
@@ -123,22 +121,22 @@ Number *Complex::mul(Number * num) {
     if (num->types() == INTEGER) {
 
         Integer* aInteger = dynamic_cast<Integer *>(num);
-        this->set_val(this->value.first * aInteger->val(), this->value.second * aInteger->val());
+        this->set_val(this->real() * aInteger->val(), this->imag() * aInteger->val());
         delete aInteger;
         return this;
 
     } else if (num->types() == FLOAT) {
 
         Float* aFloat = dynamic_cast<Float *>(num);
-        this->set_val(this->value.first * aFloat->val(), this->value.second * aFloat->val());
+        this->set_val(this->real() * aFloat->val(), this->imag() * aFloat->val());
         delete aFloat;
         return this;
 
     } else if (num->types() == COMPLEX) {
 
         Complex* aComplex = dynamic_cast<Complex *>(num);
-        this->set_val(this->value.first * aComplex->real() - this->value.second * aComplex->imag(),
-                      this->value.first * aComplex->imag() + this->value.second * aComplex->real());
+        this->set_val(std::make_pair(this->real() * aComplex->real() - this->imag() * aComplex->imag(),
+                      this->real() * aComplex->imag() + this->imag() * aComplex->real()));
         delete aComplex;
         return this;
 
@@ -159,15 +157,20 @@ Number *Complex::div(Number * num) {
     if (num->types() == INTEGER) {
 
         Integer* aInteger = dynamic_cast<Integer *>(num);
-        this->set_val(this->value.first / aInteger->val(), this->value.second / aInteger->val());
-        delete aInteger;
+        if (aInteger->val() != 0) {
+            this->set_val(this->real() / aInteger->val(), this->imag() / aInteger->val());
+            delete aInteger;
+        }
+
         return this;
 
     } else if (num->types() == FLOAT) {
 
         Float* aFloat = dynamic_cast<Float *>(num);
-        this->set_val(this->value.first / aFloat->val(), this->value.second / aFloat->val());
-        delete aFloat;
+        if (aFloat->val() != 0) {
+            this->set_val(this->real() / aFloat->val(), this->imag() / aFloat->val());
+            delete aFloat;
+        }
         return this;
 
     } else if (num->types() == COMPLEX) {
@@ -206,8 +209,7 @@ void Complex::set_val(double real, double imag) {
      *
      * 이 때 make_pair함수를 이용
      */
-    this->value.first = real;
-    this->value.second = imag;
+    this->value = std::make_pair(real, imag);
 }
 
 std::pair<double, double> Complex::val() const {
