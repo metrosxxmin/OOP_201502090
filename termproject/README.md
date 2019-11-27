@@ -1,1 +1,7 @@
-PuyoPuyo Game
+# ぷよぷよ(PuyoPuyo) Game
+- ## 개요
+  1991, 1992년에 처음 나온 낙하물 퍼즐류의 퍼즐 게임을 모티브로 변형된 내용을 구현
+- ## 개발환경 및 도구
+  Ubuntu 18.04 / vim editor / g++ (Ubuntu 7.4.0 - 1ubuntu1 ~ 18.04.1) 7.4.0
+- ## 개발내용
+  
