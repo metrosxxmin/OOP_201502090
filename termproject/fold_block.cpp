@@ -1,0 +1,13 @@
+//
+// Created by Soomin on 2019-11-27.
+//
+
+#include "fold_block.h"
+
+fold_block::fold_block(int c1, int c2, int c3) {
+
+}
+
+void fold_block::rotate() {
+
+}
