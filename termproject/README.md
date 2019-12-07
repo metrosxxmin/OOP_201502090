@@ -11,3 +11,18 @@
   또한 게임에서 생성되는 block의 종류는 아래의 3가지로 제한
   
   ![using_block](./image/using_block.png)
+
+  Game map의 크기는 5 x 12 이고 block shape와 block color은 랜덤하게 생성
+  랜덤 생성을 위해 의미부여되는 정수 값은 아래를 참고
+  
+  - block shape
+  
+    1 : fold block
+    2 : tree block
+    3 : cross block
+  - block color
+  
+    1 : grey (사라지지 않는 color)
+    2 : red
+    3 : green
+    4 : blue
