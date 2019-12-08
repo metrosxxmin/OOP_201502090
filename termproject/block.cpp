@@ -6,13 +6,11 @@
 
 block::block(int color) {
     this->color = color;
-    this->x = 0;
-    this->y = 0;
-    this->group = new color_block(this);
+    this->set_location(0, 0);
 }
 
 block::~block() {
-
+    this->color = 0;
 }
 
 int block::get_color() {
@@ -28,11 +26,11 @@ int block::get_y() {
 }
 
 void block::set_group(color_block *group) {
-
+    this->group = group;
 }
 
 color_block* block::get_group() {
-    return nullptr;
+    return this->group;
 }
 
 void block::set_location(int x, int y) {
@@ -41,6 +39,7 @@ void block::set_location(int x, int y) {
 }
 
 bool block::can_left() {
+
     return false;
 }
 

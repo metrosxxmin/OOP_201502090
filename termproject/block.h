@@ -7,12 +7,14 @@
 
 
 #include "color_block.h"
+#include "big_block.h"
 
 class block {
-protected:
+private:
     int color;
     int x, y;
     color_block * group;
+
 public:
     block(int color);
     ~block();

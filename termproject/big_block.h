@@ -13,7 +13,7 @@ using namespace std;
 class big_block {
 protected:
     vector<block *> v;
-    int min_x, min_y, max_x, max_y;
+    static int min_x, min_y, max_x, max_y;
 public:
     ~big_block();
     void rotate();
@@ -22,9 +22,10 @@ public:
     bool can_down();
     void left();
     void right();
-    bool down();
-    bool down_all();
-    bool move(int input);
+    void down();
+    void down_all();
+    bool move();   // call array_2d's gravity func.
+    bool met_floor();
 };
 
 #endif //PUYOPUYO_BIG_BLOCK_H
