@@ -51,7 +51,7 @@ void key_event() {
 
     }
     if (control == "e") {    // rotating clockwise
-
+        target->rotate();
     }
 
     if(do_you_need_the_new_block) {
