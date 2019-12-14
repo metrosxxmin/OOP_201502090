@@ -16,7 +16,7 @@ protected:
     static int min_x, min_y, max_x, max_y;
 public:
     ~big_block();
-    void rotate();
+	virtual void rotate();
     bool can_left();
     bool can_right();
     bool can_down();
