@@ -7,8 +7,6 @@
 #include "block.h"
 #include "array_2d.h"
 
-int fold_block::flag = 0;
-
 fold_block::fold_block(int c1, int c2, int c3) {
     block * _part1 = new block(c1);
     _part1->set_location(2, 1);
@@ -43,25 +41,24 @@ void fold_block::rotate() {
     if (array_2d::visit_check(_part2->get_x(), _part2->get_y() + 1)) return;
 
     big_block::v.clear();
-    if (flag % 4 == 0) {
+    if (big_block::flag % 4 == 0) {
         _part4->set_location(_part2->get_x() - 1, _part2->get_y());
         _part5->set_location(_part2->get_x() + 1, _part2->get_y());
 
-    } else if (flag % 4 == 1) {
+    } else if (big_block::flag % 4 == 1) {
         _part4->set_location(_part2->get_x(), _part2->get_y() - 1);
         _part5->set_location(_part2->get_x(), _part2->get_y() + 1);
 
-    } else if (flag % 4 == 2) {
+    } else if (big_block::flag % 4 == 2) {
         _part4->set_location(_part2->get_x() + 1, _part2->get_y());
         _part5->set_location(_part2->get_x() - 1, _part2->get_y());
-
 
     } else {
         _part4->set_location(_part2->get_x(), _part2->get_y() + 1);
         _part5->set_location(_part2->get_x(), _part2->get_y() - 1);
 
     }
-    flag++;
+	big_block::flag++;
 
     big_block::v.push_back(_part4);
     big_block::v.push_back(_part2);

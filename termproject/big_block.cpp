@@ -12,9 +12,9 @@ int big_block::min_x = 0;
 int big_block::min_y = 0;
 int big_block::max_x = 4;
 int big_block::max_y = 11;
+int big_block::flag = 0;
 
 big_block::~big_block() {
-
     color_block::insert(this->v);
 }
 
@@ -153,17 +153,8 @@ bool big_block::move() {
     return 0;
 }
 
-bool big_block::met_floor() {
-    int res = 0;
-
-    for (auto& idx : this->v) {
-        if (array_2d::visit_check(idx->get_x(), idx->get_y() + 1)
-            || idx->get_y() == max_y) {
-            res++;
-        }
-    }
-
-    return res;
+void big_block::set_flag(int _flag) {
+	flag = _flag;
 }
 
 

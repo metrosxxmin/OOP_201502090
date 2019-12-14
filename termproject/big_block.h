@@ -12,7 +12,8 @@ using namespace std;
 
 class big_block {
 protected:
-    vector<block *> v;
+	static int flag;
+	vector<block *> v;
     static int min_x, min_y, max_x, max_y;
 public:
     ~big_block();
@@ -25,7 +26,7 @@ public:
     void down();
     void down_all();
     bool move();   // call array_2d's gravity func.
-    bool met_floor();
+    void set_flag(int);
 };
 
 #endif //PUYOPUYO_BIG_BLOCK_H
