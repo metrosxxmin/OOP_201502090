@@ -12,12 +12,12 @@ using namespace std;
 
 class big_block {
 protected:
-	static int flag;
-	vector<block *> v;
+    static int flag;
+    vector<block *> v;
     static int min_x, min_y, max_x, max_y;
 public:
     ~big_block();
-	virtual void rotate();
+    virtual void rotate();
     bool can_left();
     bool can_right();
     bool can_down();

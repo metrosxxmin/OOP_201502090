@@ -94,7 +94,7 @@ bool create_block() {
 void call_loop() {
     srand((unsigned int)time(0));
 
-//    print_init();
+    print_init();
     while (1) {
 
         if (!create_block()) break;
@@ -104,9 +104,9 @@ void call_loop() {
             print_status();
             key_event();
             if (do_you_need_the_new_block) break;
-
         }
 
+        target->big_block::set_flag(0);
     }
 }
 

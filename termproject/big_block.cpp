@@ -15,7 +15,7 @@ int big_block::max_y = 11;
 int big_block::flag = 0;
 
 big_block::~big_block() {
-    color_block::insert(this->v);
+    //color_block::set_set(this->v);
 }
 
 void big_block::rotate() {
@@ -29,7 +29,6 @@ bool big_block::can_left() {
             return false;
         }
     }
-
     return true;
 }
 
@@ -142,19 +141,22 @@ void big_block::down_all() {
 
         array_2d::insert(this->v);
     }
+
 }
 
 bool big_block::move() {
     vector<block *> mov_info = array_2d::gravity(this->v);
 
     for(auto& idx : mov_info)
-        array_2d::check_visit(idx->get_x(), idx->get_y(), true);
+        array_2d::check_visit(idx->get_x(), idx->get_y(), 1);
+
+    array_2d::post_process();
 
     return 0;
 }
 
 void big_block::set_flag(int _flag) {
-	flag = _flag;
+    flag = _flag;
 }
 
 

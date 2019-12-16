@@ -8,11 +8,15 @@
 #include "color_block.h"
 
 int array_2d::score = 0;
+int array_2d::count = 0;
 block * array_2d::block_array[W][H] = {0,};
 bool array_2d::can_visit[W][H] = {0,};
 
+set<color_block *> array_2d::explosion_s;
+
 array_2d::array_2d() {
     array_2d::score = 0;
+    array_2d::explosion_s = set<color_block *>();
 
     int i = 0, j = 0;
     for (i = 0; i < H; ++i) {
@@ -52,6 +56,7 @@ bool array_2d::can_make(int type) {                 // Can you make new blocks i
 
 void array_2d::delete_block(int x, int y) { // Delete merged same color block.
     block_array[x][y]->~block();
+    array_2d::check_visit(x, y, 0);
 }
 
 void array_2d::insert(vector<block *> v) {          // Store all block filled in board.
@@ -86,7 +91,6 @@ bool array_2d::can_move(int x, int y) {             // Can you move the blocks i
 }
 
 void array_2d::print() {                            //
-
     int i = 0, j = 0;
     for (i = 0; i < H; ++i) {
         for (j = 0; j < W; ++j) {
@@ -100,21 +104,20 @@ void array_2d::insert_explosion(color_block *group) {   //
 
 }
 
-void array_2d::remove_explosion(color_block *group) {   //
+void array_2d::remove_explosion() {   //
 
 }
 
 bool array_2d::can_explosion() {                    // Can the blocks are explosive in the board?
     int res = 0;
 
-
-
-
     return res;
 }
 
-void array_2d::explosion() {                        //
+bool array_2d::explosion() {                        //
 
+
+    return 0;
 }
 
 int array_2d::get_score() {
@@ -138,6 +141,108 @@ vector<block *> array_2d::gravity(vector<block *> v) {
         }
         insert(v);
     }
-
     return v;
+}
+
+int array_2d::DFS[W][H] = {0,};
+vector<block *> array_2d::exp_s;
+
+void array_2d::post_process() {
+    for (int i = H - 1; i > 0; --i) {
+        for (int j = 0; j < W; ++j) {
+            if (block_array[j][i]->get_color() == 0) continue;
+            if (block_array[j][i]->get_color() == 1) continue;
+
+            count = 1;
+            if (array_2d::visit_check(j, i) && !array_2d::DFS[j][i]) {
+                array_2d::dfs(j, i, block_array[j][i]->get_color());
+            }
+            if (array_2d::exp_s.size() >= 4) {
+                // remove in the array_2d
+                array_2d::kill_gray();
+                for (auto &idx : exp_s)
+                    array_2d::delete_block(idx->get_x(), idx->get_y());
+                // gravity
+                array_2d::score = score + 1;
+            }
+
+            array_2d::exp_s.clear();
+
+
+            for (int k = 0; k < 10; ++k) {
+                for (int i = H - 2; i >= 0; --i) {
+                    for (int j = 0; j < W; ++j) {
+                        if (array_2d::block_array[j][i]->get_color() != 0) {
+
+                            int color = array_2d::block_array[j][i]->get_color();
+                            int _x = array_2d::block_array[j][i]->get_x();
+                            int _y = array_2d::block_array[j][i]->get_y();
+                            if (!array_2d::visit_check(_x, _y + 1)) {
+                                array_2d::block_array[j][i + 1]->set_color(color);
+                                array_2d::delete_block(_x, _y);
+                                array_2d::check_visit(_x, _y + 1, true);
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    for (int i = H - 1; i > 0; --i) {
+        for (int j = 0; j < W; ++j) {
+            array_2d::DFS[j][i] = 0;
+        }
+    }
+
+}
+
+void array_2d::dfs(int x, int y, int color) {
+    if (x > 0 && array_2d::block_array[x - 1][y]->get_color() == color && !array_2d::DFS[x - 1][y]) {
+        array_2d::DFS[x - 1][y] = 1;
+        exp_s.push_back(array_2d::block_array[x - 1][y]);
+        array_2d::dfs(x - 1, y, color);
+    }
+    if (y > 0 && array_2d::block_array[x][y - 1]->get_color() == color && !array_2d::DFS[x][y - 1]) {
+        array_2d::DFS[x][y - 1] = 1;
+        exp_s.push_back(array_2d::block_array[x][y - 1]);
+        array_2d::dfs(x, y - 1, color);
+    }
+    if (y < H - 1 && array_2d::block_array[x][y + 1]->get_color() == color && !array_2d::DFS[x][y + 1]) {
+        array_2d::DFS[x][y + 1] = 1;
+        exp_s.push_back(array_2d::block_array[x][y + 1]);
+        array_2d::dfs(x, y + 1, color);
+    }
+    if (x < W - 1  && array_2d::block_array[x + 1][y]->get_color() == color && !array_2d::DFS[x + 1][y]) {
+        array_2d::DFS[x + 1][y] = 1;
+        exp_s.push_back(array_2d::block_array[x + 1][y]);
+        array_2d::dfs(x + 1, y, color);
+    }
+}
+
+void array_2d::kill_gray() {
+    int dx[4] = {1, -1, 0, 0};
+    int dy[4] = {0, 0, 1, -1};
+
+    for (auto& idx : array_2d::exp_s) {
+        for (int i = 0; i < 4; ++i) {
+            array_2d::is_gray_block(idx->get_x() + dx[i], idx->get_y() + dy[i]);
+        }
+    }
+}
+
+
+void array_2d::is_gray_block(int x, int y) {
+    if (x > -1 && x < W && y < H && y > -1) {
+        int color = array_2d::block_array[x][y]->get_color();
+        if (color == 1) {
+            array_2d::delete_block(x, y);
+            if (x > 0) is_gray_block(x - 1, y);
+            if (x < W - 1) is_gray_block(x + 1, y);
+            if (y < H - 1) is_gray_block(x, y + 1);
+            if (y > 0) is_gray_block(x, y - 1);
+        }
+    }
 }

@@ -11,14 +11,16 @@
 
 class block {
 private:
-    int color;
     int x, y;
     color_block * group;
 
 public:
+    int color;
+
     block(int color);
     ~block();
     int get_color();
+    void set_color(int);
     int get_x();
     int get_y();
     void set_group(color_block * group);

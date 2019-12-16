@@ -5,7 +5,7 @@
 #ifndef PUYOPUYO_COLOR_BLOCK_H
 #define PUYOPUYO_COLOR_BLOCK_H
 
-#include <vector>
+#include <set>
 
 using namespace std;
 
@@ -13,13 +13,14 @@ class block;
 class color_block {
 private:
 
-    static vector<block *> s;                 // dealing with created block
+    set<block *> s;                 // dealing with created block
 public:
     color_block(block * b);
-    static void insert(vector<block *> s);
-    vector<block *> get_set();
+    void insert(set<block *> s);
+    set<block *> get_set();
     int get_set_size();
     void explosion();
+    // void set_set(vector<block *> v);
 
 };
 
